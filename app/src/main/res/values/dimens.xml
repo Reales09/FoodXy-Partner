@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_padding_min">8dp</dimen>
+    <dimen name="product_img_height">0dp</dimen>
+    <dimen name="product_img_width">148dp</dimen>
+    <dimen name="common_padding_default">16dp</dimen>
+</resources>
