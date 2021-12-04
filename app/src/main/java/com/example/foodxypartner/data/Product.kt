@@ -1,4 +1,4 @@
-package com.example.foodxypartner
+package com.example.foodxypartner.data
 
 import com.google.firebase.firestore.Exclude
 

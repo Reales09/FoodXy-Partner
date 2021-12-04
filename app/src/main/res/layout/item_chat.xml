@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+
+    >
+
+    <com.google.android.material.textview.MaterialTextView
+
+        android:id="@+id/tvMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_padding_min"
+        android:textAppearance="?attr/textAppearanceBody1"
+        tools:text="Hola, buen día"
+        android:background="@drawable/background_chat_support"
+        android:textColor="?attr/colorOnPrimary"
+
+        />
+
+</LinearLayout>

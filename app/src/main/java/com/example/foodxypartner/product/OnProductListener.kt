@@ -1,4 +1,6 @@
-package com.example.foodxypartner
+package com.example.foodxypartner.product
+
+import com.example.foodxypartner.data.Product
 
 interface OnProductListener {
 

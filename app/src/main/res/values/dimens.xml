@@ -4,4 +4,7 @@
     <dimen name="product_img_height">0dp</dimen>
     <dimen name="product_img_width">148dp</dimen>
     <dimen name="common_padding_default">16dp</dimen>
+    <dimen name="chat_guideline_end">48dp</dimen>
+    <dimen name="chat_stroke">1dp</dimen>
+    <dimen name="chat_margin_horizontal">64dp</dimen>
 </resources>

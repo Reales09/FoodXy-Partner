@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="status_key">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+
+    </integer-array>
+    
+    <string-array name="status_value">
+
+        <item>@string/order_status_ordered</item>
+        <item>@string/order_status_preparing</item>
+        <item>@string/order_status_sent</item>
+        <item>@string/order_status_delivered</item>
+    </string-array>
+    
+
+    
+</resources>

@@ -1,5 +1,6 @@
-package com.example.foodxypartner
+package com.example.foodxypartner.product
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -8,7 +9,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.foodxypartner.add.AddDialogFragment
+import com.example.foodxypartner.core.Constants
+import com.example.foodxypartner.data.Product
+import com.example.foodxypartner.R
 import com.example.foodxypartner.databinding.ActivityMainBinding
+import com.example.foodxypartner.order.OrderActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
@@ -16,7 +22,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import org.w3c.dom.Document
+import com.google.firebase.iid.FirebaseInstanceIdReceiver
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
 
 class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
 
@@ -69,6 +76,8 @@ class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
 
 
 
+
+
     }
 
 
@@ -97,6 +106,8 @@ class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
             }
         }
     }
+
+
 
     override fun onResume() {
         super.onResume()
@@ -148,6 +159,8 @@ class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
                         }
                     }
             }
+            R.id.action_order_history -> startActivity(Intent(this, OrderActivity::class.java))
+
         }
 
         return super.onOptionsItemSelected(item)

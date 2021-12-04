@@ -1,4 +1,4 @@
-package com.example.foodxypartner
+package com.example.foodxypartner.add
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -17,9 +17,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.foodxypartner.data.EventPost
+import com.example.foodxypartner.core.Constants
+import com.example.foodxypartner.data.Product
 import com.example.foodxypartner.databinding.FragmentDialogAddBinding
+import com.example.foodxypartner.product.MainAux
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 
 class AddDialogFragment : DialogFragment(), DialogInterface.OnShowListener {

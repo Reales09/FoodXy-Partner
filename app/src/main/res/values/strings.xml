@@ -6,4 +6,24 @@
     <string name="hint_description">Descripción</string>
     <string name="hint_quantity">Cantidad</string>
     <string name="hint_price">Precio</string>
+
+    <string name="order_total_price">Total: $%1$.2f COP</string>
+
+    <string name="order_track_shipment">Seguir envío</string>
+    <string name="order_status">Estado: %1$s</string>
+    <string name="order_id">ID: %1$s</string>
+    <string name="order_chat_help">¿Necesitas ayuda?</string>
+    <string name="order_title">Historial de compras</string>
+
+    <string name="order_status_ordered">Aprobado</string>
+    <string name="order_status_preparing">Procesando</string>
+    <string name="order_status_sent">Enviado</string>
+    <string name="order_status_delivered">Entregado</string>
+    <string name="order_status_unknown">Desconocido</string>
+
+    <string name="track_title">Rastreo</string>
+    <string name="hint_status">Estado</string>
+
+    <string name="hint_chat">Escibe algo</string>
+    <string name="chat_title">Soporte</string>
 </resources>

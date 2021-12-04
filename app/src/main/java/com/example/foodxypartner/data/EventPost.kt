@@ -1,4 +1,4 @@
-package com.example.foodxypartner
+package com.example.foodxypartner.data
 
 class EventPost() {
     var isSuccess:Boolean=false

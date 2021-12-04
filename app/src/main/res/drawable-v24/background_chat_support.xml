@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape
+            android:shape="rectangle"
+            >
+            <solid android:color="@color/red_like"/>
+
+            <corners
+                android:topLeftRadius="@dimen/common_padding_default"
+                android:bottomLeftRadius="@dimen/common_padding_default"/>
+
+
+            <stroke
+                android:width="@dimen/chat_stroke"
+                android:color="?attr/colorPrimaryVariant"/>
+
+        </shape>
+    </item>
+
+
+</selector>
