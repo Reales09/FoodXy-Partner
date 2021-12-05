@@ -10,7 +10,11 @@ import com.example.foodxypartner.core.Constants
 import com.example.foodxypartner.data.Order
 import com.example.foodxypartner.databinding.ActivityOrderBinding
 import com.example.foodxypartner.fcm.NotificationRS
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.firestore.v1.StructuredQuery
 
 class OrderActivity : AppCompatActivity(), OnOrderListener, OrderAux {
@@ -20,6 +24,9 @@ class OrderActivity : AppCompatActivity(), OnOrderListener, OrderAux {
     private lateinit var adapter: OrderAdapter
 
     private lateinit var orderSelected: Order
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
 
     private val aValues: Array<String> by lazy {
         resources.getStringArray(R.array.status_value)
@@ -38,6 +45,7 @@ class OrderActivity : AppCompatActivity(), OnOrderListener, OrderAux {
 
         setupRecyclerView()
         setupFirestore()
+        configAnalytics()
 
 
     }
@@ -69,6 +77,11 @@ class OrderActivity : AppCompatActivity(), OnOrderListener, OrderAux {
             }
 
     }
+
+    private fun configAnalytics() {
+        firebaseAnalytics = Firebase.analytics
+    }
+
 
     private fun notifyClient(order: Order){
 
@@ -115,6 +128,18 @@ class OrderActivity : AppCompatActivity(), OnOrderListener, OrderAux {
                 Toast.makeText(this, "Orden actualizada", Toast.LENGTH_SHORT).show()
 
                 notifyClient(order)
+                //Analytics
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_SHIPPING_INFO){
+                    val products = mutableListOf<Bundle>()
+                    order.products.forEach{
+                        val bundle = Bundle()
+                        bundle.putString("id_product",it.key)
+                        products.add(bundle)
+                    }
+                    param(FirebaseAnalytics.Param.SHIPPING, products.toTypedArray())
+                    param(FirebaseAnalytics.Param.PRICE, order.totalPrice)
+                }
+
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Error al actualizar orden.", Toast.LENGTH_SHORT).show()
