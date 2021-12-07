@@ -1,8 +1,11 @@
 package com.example.foodxypartner.product
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -15,6 +18,7 @@ import com.example.foodxypartner.data.Product
 import com.example.foodxypartner.R
 import com.example.foodxypartner.databinding.ActivityMainBinding
 import com.example.foodxypartner.order.OrderActivity
+import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
@@ -25,9 +29,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.iid.FirebaseInstanceIdReceiver
-import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
 import com.google.firebase.ktx.Firebase
+import java.security.MessageDigest
+import java.util.*
 
 class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
 
@@ -95,9 +99,6 @@ class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
         configAnalytics()
 
 
-
-
-
     }
 
 
@@ -112,20 +113,64 @@ class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
                 binding.efab.show()
 
             } else {
-                val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build(),
-                AuthUI.IdpConfig.GoogleBuilder().build()
+                val providers = arrayListOf(
+                AuthUI.IdpConfig.EmailBuilder().build(),
+                AuthUI.IdpConfig.GoogleBuilder().build(),
+                AuthUI.IdpConfig.FacebookBuilder().build(),
+                AuthUI.IdpConfig.PhoneBuilder().build()
+
                     )
+
+                val loginView = AuthMethodPickerLayout
+                    .Builder(R.layout.view_login)
+                    .setEmailButtonId(R.id.btnEmail)
+                    .setGoogleButtonId(R.id.btnGoogle)
+                    .setFacebookButtonId(R.id.btnFacebook)
+                    .setPhoneButtonId(R.id.btnFacebook)
+                    .setTosAndPrivacyPolicyId(R.id.tvPolicy)
+                    .build()
+
 
                 resultLauncher.launch(
                     AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setIsSmartLockEnabled(false)
+                        .setTosAndPrivacyPolicyUrls("","")
                         .setAvailableProviders(providers)
+                        .setAuthMethodPickerLayout(loginView)
                         .build()
                 )
             }
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    val info = getPackageManager().getPackageInfo(
+                        "com.example.foodxypartner",
+                        PackageManager.GET_SIGNING_CERTIFICATES)
+                    for (signature in info.signingInfo.apkContentsSigners) {
+                        val md = MessageDigest.getInstance("SHA")
+                        md.update(signature.toByteArray())
+
+                        //Log.d("API >= 28 KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+                    }
+                } else {
+                    val info = getPackageManager().getPackageInfo(
+                        "com.example.foodxypartner",
+                        PackageManager.GET_SIGNATURES);
+                    for (signature in info.signatures) {
+                        val md = MessageDigest.getInstance("SHA")
+                        md.update(signature.toByteArray())
+                     //   Log.d("API < 28 KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+
+
     }
+
+
 
 
 

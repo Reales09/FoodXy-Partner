@@ -26,4 +26,14 @@
 
     <string name="hint_chat">Escibe algo</string>
     <string name="chat_title">Soporte</string>
+        <!-- ... -->
+    <string name="facebook_application_id" translatable="false">594090685155556</string>
+        <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
+    <string name="facebook_login_protocol_scheme" translatable="false">fb594090685155556</string>
+    <string name="login_welcome">Bienvenido, por favor inicia sesión.</string>
+    <string name="login_email">Email</string>
+    <string name="login_google">Google</string>
+    <string name="login_facebook">Facebook</string>
+    <string name="login_phone">Phone</string>
+
 </resources>
