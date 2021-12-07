@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
                     .setEmailButtonId(R.id.btnEmail)
                     .setGoogleButtonId(R.id.btnGoogle)
                     .setFacebookButtonId(R.id.btnFacebook)
-                    .setPhoneButtonId(R.id.btnFacebook)
+                    .setPhoneButtonId(R.id.btnPhone)
                     .setTosAndPrivacyPolicyId(R.id.tvPolicy)
                     .build()
 
@@ -138,6 +138,7 @@ class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
                         .setTosAndPrivacyPolicyUrls("","")
                         .setAvailableProviders(providers)
                         .setAuthMethodPickerLayout(loginView)
+                        .setTheme(R.style.LoginTheme)
                         .build()
                 )
             }

@@ -44,8 +44,10 @@
     <com.google.android.material.button.MaterialButton
 
         android:id="@+id/btnEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/login_width_button"
         android:layout_height="wrap_content"
+        app:icon="@drawable/ic_email"
+        android:backgroundTint="@color/orange_200"
         android:text="@string/login_email"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,11 +59,13 @@
     <com.google.android.material.button.MaterialButton
 
         android:id="@+id/btnGoogle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/blue_google"
         android:text="@string/login_google"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:icon="@drawable/ic_google"
+        app:layout_constraintStart_toStartOf="@+id/btnEmail"
+        app:layout_constraintEnd_toEndOf="@+id/btnEmail"
         app:layout_constraintTop_toBottomOf="@id/btnEmail"
 
 
@@ -69,23 +73,26 @@
     <com.google.android.material.button.MaterialButton
 
         android:id="@+id/btnFacebook"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/login_facebook"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/blue_facebook"
+        app:icon="@drawable/ic_facebook"
+        app:layout_constraintStart_toStartOf="@+id/btnEmail"
+        app:layout_constraintEnd_toEndOf="@+id/btnEmail"
         app:layout_constraintTop_toBottomOf="@id/btnGoogle"
-
 
         />
     <com.google.android.material.button.MaterialButton
 
         android:id="@+id/btnPhone"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:icon="@drawable/ic_phone"
         android:text="@string/login_phone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/green_500"
+        app:layout_constraintStart_toStartOf="@+id/btnEmail"
+        app:layout_constraintEnd_toEndOf="@+id/btnEmail"
         app:layout_constraintTop_toBottomOf="@id/btnFacebook"
 
         />

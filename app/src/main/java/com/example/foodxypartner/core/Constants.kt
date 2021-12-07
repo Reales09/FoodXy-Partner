@@ -9,6 +9,7 @@ object Constants {
     const val COLL_TOKENS = "tokens"
 
     const val PROP_STATUS = "status"
+    const val PROP_DATE= "date"
 
     //Storage
     const val PATH_PRODUCT_IMAGES = "product_images"
@@ -26,5 +27,7 @@ object Constants {
     const val PARAM_MESSAGE = "message"
     const val PARAM_TOKENS = "tokens"
     val PARAM_SUCCESS = "success"
+
+
 
 }

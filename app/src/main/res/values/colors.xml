@@ -11,4 +11,10 @@
     <color name="marron">#73321A</color>
     <color name="red_like">#FF4848</color>
     <color name="gray_100">#f5f5f5</color>
+
+    <color name="blue_google">#4285F4</color>
+    <color name="blue_facebook">#1877F2</color>
+    <color name="green_500">#4CAF50</color>
+
+
 </resources>
