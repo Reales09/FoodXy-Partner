@@ -18,10 +18,12 @@ import com.example.foodxypartner.data.Product
 import com.example.foodxypartner.R
 import com.example.foodxypartner.databinding.ActivityMainBinding
 import com.example.foodxypartner.order.OrderActivity
+import com.example.foodxypartner.promo.PromoFragment
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -30,6 +32,7 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import java.security.MessageDigest
 import java.util.*
 
@@ -237,6 +240,13 @@ class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
             }
             R.id.action_order_history -> startActivity(Intent(this, OrderActivity::class.java))
 
+            R.id.action_promo  -> {
+
+                PromoFragment().show(supportFragmentManager,PromoFragment::class.java.simpleName)
+            }
+
+
+
         }
 
         return super.onOptionsItemSelected(item)
@@ -308,17 +318,42 @@ class MainActivity : AppCompatActivity(), OnProductListener, MainAux {
     }
 
     override fun onLongClick(product: Product) {
-        val db = FirebaseFirestore.getInstance()
-        val productRef = db.collection(Constants.COLL_PRODUCTS)
 
-        product.id?.let { id ->
-            productRef.document(id)
-                .delete()
-                .addOnFailureListener {
-                    Toast.makeText(this, "Error al consultar datos", Toast.LENGTH_SHORT).show()
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.product_dialog_delete_title)
+            .setMessage(R.string.product_dialog_delete_msg)
+            .setPositiveButton(R.string.product_dialog_delete_confirm){_,_->
+
+                val db = FirebaseFirestore.getInstance()
+                val productRef = db.collection(Constants.COLL_PRODUCTS)
+
+                product.id?.let { id ->
+
+                    product.imgUrl?.let { url ->
+
+                        val photoRef = FirebaseStorage.getInstance().getReferenceFromUrl(url)
+
+                        //FirebaseStorage.getInstance().reference.child(Constants.PATH_PRODUCT_IMAGES).child(id)
+                        photoRef
+                            .delete()
+                            .addOnSuccessListener {
+                                productRef.document(id)
+                                    .delete()
+                                    .addOnFailureListener {
+                                        Toast.makeText(this, "Error al eliminar registro", Toast.LENGTH_SHORT).show()
+                                    }
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, "Error al Eliminar foto", Toast.LENGTH_SHORT).show()
+                            }
+
+                    }
+
                 }
-        }
 
+            }
+            .setNegativeButton(R.string.dialog_cancel,null)
+            .show()
 
     }
 

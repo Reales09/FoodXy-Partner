@@ -5,7 +5,10 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -22,8 +25,10 @@ import com.example.foodxypartner.core.Constants
 import com.example.foodxypartner.data.Product
 import com.example.foodxypartner.databinding.FragmentDialogAddBinding
 import com.example.foodxypartner.product.MainAux
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 
 class AddDialogFragment : DialogFragment(), DialogInterface.OnShowListener {
 
@@ -86,13 +91,18 @@ class AddDialogFragment : DialogFragment(), DialogInterface.OnShowListener {
             positiveButton = it.getButton(Dialog.BUTTON_POSITIVE)
             negativeButton = it.getButton(Dialog.BUTTON_NEGATIVE)
 
+            product?.let {
+                positiveButton?.setText("Actualizar")
+            }
+
             positiveButton?.setOnClickListener {
 
                 binding?.let {
 
                     enableUI(false)
 
-                    uploadImage(product?.id){eventPost ->
+                    //uploadImage(product?.id){eventPost ->
+                    uploadReducedImage(product?.id,product?.imgUrl){eventPost ->
 
                         if (eventPost.isSuccess){
 
@@ -143,6 +153,9 @@ class AddDialogFragment : DialogFragment(), DialogInterface.OnShowListener {
         product = (activity as? MainAux)?.getProductSelected()
         product?.let { product ->
             binding?.let {
+
+                dialog?.setTitle("Actualizar producto")
+
                 it.etName.setText(product.name)
                 it.etDescription.setText(product.description)
                 it.etQuatity.setText(product.quantity.toString())
@@ -216,6 +229,116 @@ class AddDialogFragment : DialogFragment(), DialogInterface.OnShowListener {
         }
     }
 
+
+    private fun uploadReducedImage(productId:String?,imageUrl:String?, callback: (EventPost)->Unit) {
+        val eventPost = EventPost()
+        imageUrl?.let { eventPost.photoUrl = it }
+        eventPost.documentId = productId ?: FirebaseFirestore.getInstance().collection(Constants.COLL_PRODUCTS).document().id
+
+        FirebaseAuth.getInstance().currentUser?.let { user ->
+            val imagesRef = FirebaseStorage.getInstance().reference.child(user.uid)
+                .child(Constants.PATH_PRODUCT_IMAGES)
+            val photoRef = imagesRef.child(eventPost.documentId!!)
+
+            //photoSelectedUri?.let {uri ->
+            if (photoSelectedUri == null) {
+
+                eventPost.isSuccess = true
+                callback(eventPost)
+
+            } else {
+
+                binding?.let { binding ->
+
+                    getBitmapFromUri(photoSelectedUri!!)?.let { bitmap ->
+                        binding.progressBar.visibility = View.VISIBLE
+
+                        val baos = ByteArrayOutputStream()
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos)
+
+
+                        photoRef.putBytes(baos.toByteArray())
+
+                            .addOnProgressListener {
+                                val progress =
+                                    (100 * it.bytesTransferred / it.totalByteCount).toInt()
+                                it.run {
+                                    binding.progressBar.progress = progress
+                                    binding.tvProgress.text = String.format("%s%%", progress)
+
+                                }
+                            }
+                            .addOnSuccessListener {
+
+                                it.storage.downloadUrl.addOnSuccessListener { downloadUrl ->
+                                    Log.i("URL", downloadUrl.toString())
+                                    eventPost.isSuccess = true
+                                    eventPost.photoUrl = downloadUrl.toString()
+                                    callback(eventPost)
+                                }
+                            }
+                            .addOnFailureListener {
+
+                                Toast.makeText(
+                                    activity,
+                                    "Error al subir imagen",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                enableUI(true)
+                                eventPost.isSuccess = false
+                                callback(eventPost)
+                            }
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    private fun getBitmapFromUri(uri: Uri): Bitmap?{
+
+        activity?.let {
+            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+
+                val source = ImageDecoder.createSource(it.contentResolver,uri)
+                ImageDecoder.decodeBitmap(source)
+
+            }else{
+                MediaStore.Images.Media.getBitmap(it.contentResolver, uri)
+            }
+            return getResizedImage(bitmap, 720)
+        }
+        return null
+
+    }
+
+    private fun getResizedImage(image: Bitmap, maxSize: Int): Bitmap{
+
+        var width = image.width
+        var height = image.height
+
+        if (width <= maxSize && height <= maxSize) return image
+
+        val bitmapRatio = width.toFloat() / height.toFloat()
+        if (bitmapRatio > 1){
+
+            width = maxSize
+            height = (width / bitmapRatio).toInt()
+
+
+        }else{
+            height = maxSize
+            width = (height / bitmapRatio).toInt()
+        }
+
+        return  Bitmap.createScaledBitmap(image,width,height,true)
+
+    }
+
+
+
     private fun save (product: Product, documentId: String){
 
         val db = FirebaseFirestore.getInstance()
@@ -276,6 +399,9 @@ class AddDialogFragment : DialogFragment(), DialogInterface.OnShowListener {
                 etDescription.isEnabled = enable
                 etQuatity.isEnabled = enable
                 etPrice.isEnabled = enable
+                progressBar.visibility = if (enable)View.INVISIBLE else View.VISIBLE
+                tvProgress.visibility = if (enable)View.INVISIBLE else View.VISIBLE
+
 
             }
         }

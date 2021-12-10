@@ -3,6 +3,8 @@ package com.example.foodxypartner.core
 object Constants {
 
 
+    val SUCCESS: Boolean = true
+    val ERROR: Boolean = false
     const val COLL_PRODUCTS = "products"
     const val COLL_REQUEST= "requests"
     const val COLL_USERS = "users"
@@ -21,11 +23,15 @@ object Constants {
     const val PROP_TOKEN = "token"
     const val FOODXY_PARTNER_RS = "https://foodxy.000webhostapp.com/FoodxyPartner/FoodxyRS.php"
     const val SEND_NOTIFICATION = "sendNotification"
+    const val SEND_NOTIFICATION_BY_TOPIC = "sendNotificationByTopic"
 
     const val PARAM_METHOD = "method"
     const val PARAM_TITLE = "title"
     const val PARAM_MESSAGE = "message"
     const val PARAM_TOKENS = "tokens"
+    const val PARAM_TOPIC = "topic"
+    const val PARAM_IMAGE = "image"
+
     val PARAM_SUCCESS = "success"
 
 
